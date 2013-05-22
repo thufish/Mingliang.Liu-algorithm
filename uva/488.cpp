@@ -9,9 +9,7 @@ int main() {
 
     for (int t = 0; t < times; t++) {
         int A, F;
-        getchar();
-        string tmp;
-        getline(cin, tmp);
+        cout << endl;
 
         cin >> A >> F;
 
