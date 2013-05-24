@@ -4,6 +4,42 @@
 
 using namespace std;
 
+/** The iterative solution using std::next_permutation()
+ *
+ * This can not pass when n == 8
+ */
+class Solution1 {
+public:
+    vector<vector<string> > solveNQueens(int n) {
+        vector<int> numbers(n);
+        for (int i = 0; i < n; i++)
+            numbers[i] = i;
+        
+        vector<vector<string>> ans;
+        do  {
+            vector<bool> taken_left(2 * n , false);
+            vector<bool> taken_right(2 * n , false);
+            bool ok = true;
+            vector<string> a;
+            for (int row = 0; row < n; row++) {
+                if (taken_left[n + numbers[row] - row] || taken_left[row + numbers[row]]) {
+                    ok = false;
+                    break;
+                }
+                string str(n, '.');
+                str[numbers[row]] = 'Q';
+                a.push_back(str);
+                taken_left[n + numbers[row] - row] = true;
+                taken_right[row + numbers[row]] = true;
+            }
+            if (ok)
+                ans.push_back(a);
+        } while (next_permutation(numbers.begin(), numbers.end()));
+        
+        return ans;
+    }
+};
+
 /**
  * This solution permutes the colums by hand and prunes them once they
  * conflict. Thus this method is much more efficient than the first one.
