@@ -4,14 +4,15 @@
 
 using namespace std;
 
-/** Dynamic programming
+/** Dynamic Programming
  *
  * f[i][j] is the max sum of j segments ended with diff[i]
  * Thus:
- * f[i][j] = |- f[i - 1][j] + diff[i]                       # append diff[i] to j segments
- *           |- max{f[k][j - 1], k in [0, i - 1]} + diff[i] # new segment from diff[i]
+ *              |- f[i - 1][j] + diff[i]                       # append diff[i] to j segments
+ * f[i][j] = max|
+ *              |- max{f[k][j - 1], k in [0, i - 1]} + diff[i] # new segment from diff[i]
  *
- * Store the max{...} in g[], then we can access the max in O(1) time 
+ * Store the max{...} in g[i - 1][j - 1], then we can access the max in O(1) time 
  */
 class Solution {
 public:
