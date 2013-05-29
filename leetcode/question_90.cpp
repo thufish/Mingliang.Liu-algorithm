@@ -4,6 +4,9 @@
 
 using namespace std;
 
+/** A recursive version.
+ * The main idea is to add the duplicate elements for different times
+ */
 class Solution {
 public:
     vector<vector<int> > subsetsWithDup(vector<int> &S) {
