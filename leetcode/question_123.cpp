@@ -1,53 +1,41 @@
+#include <algorithm>
 #include <vector>
 #include <iostream>
 
 using namespace std;
 
+/** Dynamic Programming
+ *
+ * f[i][j] is the max sum of j segments ended with diff[i]
+ * Thus:
+ *              |- f[i - 1][j] + diff[i]                       # append diff[i] to j segments
+ * f[i][j] = max|
+ *              |- max{f[k][j - 1], k in [0, i - 1]} + diff[i] # new segment from diff[i]
+ *
+ * Store the max{...} in g[i - 1][j - 1], then we can access the max in O(1) time 
+ */
 class Solution {
 public:
     
     typedef vector<int>::const_iterator iter;
     
     int maxProfit(vector<int> &prices) {
-        if (prices.size() == 0)
+        if (prices.size() < 2)
             return 0;
-            
-        int ans = maxProfitOnce(prices.begin(), prices.end());
-        
-        for (iter i = prices.begin(); i != prices.end(); i++) {
-            if ((i + 1) < prices.end() && *(i + 1) > *i)
-                continue;
-                
-            int left = maxProfitOnce(prices.begin(), i + 1);
-            if (left <= 0)
-                continue;
-                
-            int right = maxProfitOnce(i + 1, prices.end());
-            int two = left + right;
 
-            if (two > ans)
-                ans = two;
-        }
-        
-        return ans;
-    }
+        int f[3] = {0};
+        int g[3] = {0};
 
-    int maxProfitOnce(iter begin, iter end) {
-        if (begin == end)
-            return 0;
-            
-        int max_sofar = 0;
-        int max = 0;
-        int p = *begin;
-        for (iter i = begin; i != end; p = *i, i++) {
-            max_sofar += *i - p;
-            if (max_sofar < 0)
-                max_sofar = 0;
-            else if (max_sofar > max)
-                max = max_sofar;
+        for (int i = 1; i < prices.size(); ++i) {
+            int diff = prices[i] - prices[i - 1];
+            int m = min(i, 2);
+            for (int j = m; j >= 1; --j) {
+                f[j] = max(f[j], g[j - 1]) + diff;
+                g[j] = max(g[j], f[j]);
+            }
         }
-        
-        return max;
+            
+        return max(g[1], g[2]);
     }
 };
 
