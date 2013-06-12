@@ -1,5 +1,6 @@
 #include <stack>
 #include <iostream>
+#include <cassert>
 
 using namespace std;
 
@@ -13,16 +14,9 @@ public:
     }
 
     void move() {
+        assert(stack1.size() > 0 && stack2.size() == 0 && stack3.size() == 0);
         move(stack1.size(), stack1, stack3, stack2);
-    }
-
-    void dump() {
-        cout << "[Stack 1] size: ";
-        cout << stack1.size() << "\t" << endl;
-        cout << "[Stack 2] size: ";
-        cout << stack2.size() << "\t" << endl;
-        cout << "[Stack 3] size: ";
-        cout << stack3.size() << "\t" << endl;
+        assert(stack1.size() == 0 && stack2.size() == 0 && stack3.size() > 0);
     }
 
 private:
@@ -50,10 +44,8 @@ int main() {
     int a[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
     Tower<int> t;
     t.init(a, a + 9);
-    t.dump();
     t.move();
-    cout << endl;
-    t.dump();
 
+    cout << "All Passed!" << endl;
     return 0;
 }
