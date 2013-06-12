@@ -18,10 +18,11 @@ void dump(const Node *head) {
     cout << "NULL" << endl;
 }
 
-bool is_palindrome(Node *l) {
-    Node *p1, *p2;
+/** the iterative solution */
+bool is_palindrome(const Node *l) {
+    const Node *p1, *p2;
     p1 = p2 = l;
-    stack<Node *> s;
+    stack<const Node *> s;
     while (p2 && p2->next) {
         s.push(p1);
         p1 = p1->next;
@@ -31,7 +32,7 @@ bool is_palindrome(Node *l) {
         p1 = p1->next;
 
     while (p1) {
-        Node *t = s.top();
+        const Node *t = s.top();
         s.pop();
         if (t->val != p1->val)
             return false;
@@ -39,6 +40,37 @@ bool is_palindrome(Node *l) {
     }
 
     return true;
+}
+
+/** the recursive solution */
+static bool is_palindrome_recursive(const Node *head, int len, const Node **next) {
+    if (head == NULL || len == 0)
+        return true;
+    else if (len == 1) {
+        *next = head->next;
+        return true;
+    } else if (len == 2) {
+        *next = head->next->next;
+        return head->val == head->next->val;
+    } else {
+        if (!is_palindrome_recursive(head->next, len - 2, next) || next == NULL)
+            return false;
+        if (head->val != (*next)->val)
+            return false;
+        *next = (*next)->next;
+        return true;
+    }
+}
+bool is_palindrome2(const Node *l) {
+    const Node *head = l;
+    int len = 0;
+    while (l) {
+        ++len;
+        l = l->next;
+    }
+
+    const Node *next = new Node(-1);
+    return is_palindrome_recursive(head, len, &next);
 }
 
 int main() {
@@ -61,6 +93,7 @@ int main() {
     n8.next = &n9;
     dump(&n1);
     cout << is_palindrome(&n1) << endl;
+    cout << is_palindrome2(&n1) << endl;
 
     Node m1(1);
     Node m2(2);
@@ -81,6 +114,7 @@ int main() {
     m8.next = &m9;
     dump(&m1);
     cout << is_palindrome(&m1) << endl;
+    cout << is_palindrome2(&m1) << endl;
 
     Node k1(1);
     Node k2(2);
@@ -91,6 +125,7 @@ int main() {
     k3.next = &k4;
     dump(&k1);
     cout << is_palindrome(&k1) << endl;
+    cout << is_palindrome2(&k1) << endl;
 
     return 0;
 }
