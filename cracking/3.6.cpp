@@ -1,4 +1,5 @@
 #include <stack>
+#include <cassert>
 #include <iostream>
 
 using namespace std;
@@ -26,15 +27,35 @@ int main() {
     s.push(1);
     s.push(2);
     s.push(9);
+    s.push(8);
     s.push(6);
+    s.push(7);
+    s.push(4);
+    s.push(8);
 
     sort(s);
 
-    while (!s.empty()) {
-        cout << s.top() << "\t";
-        s.pop();
-    }
-    cout << endl;
+    assert(s.top() == 9);
+    s.pop();
+    assert(s.top() == 8);
+    s.pop();
+    assert(s.top() == 8);
+    s.pop();
+    assert(s.top() == 7);
+    s.pop();
+    assert(s.top() == 6);
+    s.pop();
+    assert(s.top() == 5);
+    s.pop();
+    assert(s.top() == 4);
+    s.pop();
+    assert(s.top() == 3);
+    s.pop();
+    assert(s.top() == 2);
+    s.pop();
+    assert(s.top() == 1);
+    s.pop();
 
+    cout << "All Passed!" << endl;
     return 0;
 }
