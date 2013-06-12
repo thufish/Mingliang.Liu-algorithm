@@ -1,4 +1,5 @@
 #include <stack>
+#include <cassert>
 #include <iostream>
 
 using namespace std;
@@ -24,12 +25,12 @@ public:
         if (!s1.empty())
             return s1.top();
         else
-            return INT_MIN;
+            return -1;
     }
 
     Type back() const {
         if (s1.empty() && s2.empty())
-            return INT_MAX;
+            return -1;
         else
             return be;
     }
@@ -52,29 +53,30 @@ private:
 int main() {
     MyQueue<int> q;
     q.push(1);
-    cout << q.front() << "\t" << q.back() << endl;
+    assert(q.front() == 1 && q.back() == 1);
     q.push(2);
-    cout << q.front() << "\t" << q.back() << endl;
+    assert(q.front() == 1 && q.back() == 2);
     q.push(3);
-    cout << q.front() << "\t" << q.back() << endl;
+    assert(q.front() == 1 && q.back() == 3);
     q.pop();
-    cout << q.front() << "\t" << q.back() << endl;
+    assert(q.front() == 2 && q.back() == 3);
     q.pop();
-    cout << q.front() << "\t" << q.back() << endl;
+    assert(q.front() == 3 && q.back() == 3);
     q.pop();
-    cout << q.front() << "\t" << q.back() << endl;
+    assert(q.front() == -1 && q.back() == -1);
     q.pop();
-    cout << q.front() << "\t" << q.back() << endl;
+    assert(q.front() == -1 && q.back() == -1);
     q.push(4);
-    cout << q.front() << "\t" << q.back() << endl;
+    assert(q.front() == 4 && q.back() == 4);
     q.push(1);
-    cout << q.front() << "\t" << q.back() << endl;
+    assert(q.front() == 4 && q.back() == 1);
     q.push(2);
-    cout << q.front() << "\t" << q.back() << endl;
+    assert(q.front() == 4 && q.back() == 2);
     q.pop();
-    cout << q.front() << "\t" << q.back() << endl;
+    assert(q.front() == 1 && q.back() == 2);
     q.push(5);
-    cout << q.front() << "\t" << q.back() << endl;
+    assert(q.front() == 1 && q.back() == 5);
 
+    cout << "All Passed!" << endl;
     return 0;
 }
