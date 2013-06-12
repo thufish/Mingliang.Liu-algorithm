@@ -55,3 +55,27 @@ public:
             }
     }
 };
+
+/** The best solution in the forum */
+class Solution3 {
+public:
+    void swap(int *a, int *b) {
+        int tmp = *a;
+        *a = *b;
+        *b = tmp;
+    }
+
+    void sortColors(int A[], int n) {
+        int r, w, b;
+        r = 0; b = n - 1;
+        
+        for (w = 0; w <= b;) {
+            if (A[w] == 0)
+                swap(&A[r++], &A[w++]);
+            else if (A[w] == 2)
+                swap(&A[b--], &A[w]);
+            else
+                ++w;
+        }
+    }
+};
