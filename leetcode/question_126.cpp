@@ -1,71 +1,70 @@
-#include <vector>
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
+#include <vector>
+#include <queue>
 
 using namespace std;
 
 class Solution {
 public:
-    void getPath(vector<vector<string> > &ansSet, vector<string> &ans, int now,
-                 vector<vector<int> > &pa, vector<string> &que) {
-        if (now == -1) {
-            ansSet.push_back(vector<string>(0));
-            for (int i = ans.size() - 1; i >= 0; i--)
-                ansSet.back().push_back(ans[i]);
-            return;
+    void getLadder(vector<vector<string>> &ans, unordered_map<string, vector<string>> &P, vector<string> &v, string str) {
+        if (P[str].size() == 1 && P[str][0] == str) {
+            ans.push_back(vector<string>(v.rbegin(), v.rend()));
         } else {
-            for (int i = 0; i < pa[now].size(); i++) {
-                ans.push_back(que[now]);
-                getPath(ansSet, ans, pa[now][i], pa, que);
-                ans.pop_back();
+            for (string p : P[str]) {
+                v.push_back(p);
+                getLadder(ans, P, v, p);
+                v.pop_back();
             }
         }
     }
 
     vector<vector<string>> findLadders(string start, string end, unordered_set<string> &dict) {
-        vector<string> que;
-        vector<int> step;
-        vector<vector<int>> pa;
-        unordered_map<string, int> hash;
-        step.push_back(1);
-        que.push_back(start);
-        pa.push_back(vector<int>(0));
-        pa.back().push_back(-1);
-        int head = 0;
-        int bestStep = -1;
         vector<vector<string>> ans;
-
-        while (head < que.size()) {
-            string now = que[head];
-            int nowStep = step[head];
-            if (bestStep > -1 && nowStep == bestStep)
+        
+        queue<pair<string, int>> Q;
+        unordered_map<string, vector<string>> P;
+        unordered_map<string, int> L;
+        Q.push({start, 1});
+        
+        P[start].push_back(start);
+        L[start] = 1;
+        
+        int ladder_len = -1;
+        
+        while (!Q.empty()) {
+            string str = Q.front().first;
+            int len = Q.front().second;
+            Q.pop();
+            
+            if (ladder_len > 0 && len >= ladder_len)
                 break;
-            for (int i = 0; i < now.size(); i++)
-                for (char ch = 'a'; ch <= 'z'; ch++) {
-                    string next = now;
-                    if (next[i] == ch)
+
+            for (int i = 0; i < str.size(); ++i)
+                for (int e = 0; e < 26; ++e) {
+                    char c = 'a' + e;
+                    if (str[i] == c)
                         continue;
-                    next[i] = ch;
-                    if (next == end) {
-                        bestStep = nowStep + 1;
-                        vector<string> single(0);
-                        single.push_back(end);
-                        getPath(ans, single, head, pa, que);
-                    } else if (dict.count(next)) {
-                        if (hash[next] == 0) {
-                            que.push_back(next);
-                            step.push_back(nowStep + 1);
-                            pa.push_back(vector<int>(0));
-                            pa.back().push_back(head);
-                            hash[next] = pa.size() - 1;
-                        } else if (step[hash[next]] == nowStep + 1) {
-                            pa[hash[next]].push_back(head);
-                        }
+                    string tmp(str);
+                    tmp[i] = c;
+                    if (tmp == end) {
+                        ladder_len = len + 1;
+                        vector<string> v;
+                        v.push_back(end);
+                        v.push_back(str);
+                        getLadder(ans, P, v, str);
+                    } else if (dict.find(tmp) == dict.end()) {
+                        continue;
+                    } else if (P.find(tmp) == P.end()) {
+                        P[tmp].push_back(str);
+                        L[tmp] = len + 1;
+                        Q.push({tmp, len + 1});
+                    } else if (L[tmp] == len + 1) {
+                        P[tmp].push_back(str);
                     }
                 }
-            head++;
         }
-
+        
         return ans;
     }
 };
