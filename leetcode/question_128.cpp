@@ -1,10 +1,12 @@
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
 #include <cassert>
 
 using namespace std;
 
-class Solution {
+/** The naive solution using hashing map holding range */
+class Solution1 {
 public:
     int longestConsecutive(vector<int> &num) {
         unordered_map<int, int> range;
@@ -39,8 +41,35 @@ public:
     }
 };
 
+/** A much smarter solution using hashset */
+class Solution2 {
+public:
+    int longestConsecutive(vector<int> &num) {
+        unordered_set<int> hashset;
+        for (int i : num)
+            hashset.insert(i);
+        
+        int max_len = 0;
+        for (int i : num) {
+            if (hashset.find(i + 1) != hashset.end())
+                continue;
+            
+            int l = 1;
+            int tmp = i - 1;
+            while (hashset.find(tmp) != hashset.end()) {
+                --tmp;
+                ++l;
+            }
+            if (l > max_len)
+                max_len = l;
+        }
+        
+        return max_len;
+    }
+};
+
 int main() {
-    Solution S;
+    Solution1 S;
 
     vector<int> v1 = {0};
     assert(S.longestConsecutive(v1) == 1);
