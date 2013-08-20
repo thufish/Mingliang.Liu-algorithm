@@ -50,4 +50,30 @@ public:
             }
         }
     }
+
+    /** The iterative approach in a straight-forward way */
+    void inorderTraversalIterative2(TreeNode *root, vector<int> &vec) {
+        if (root == NULL)
+            return;
+            
+        stack<pair<TreeNode *, bool>> s;
+        s.push(make_pair(root, false));
+         
+        while (!s.empty()) {
+            auto p = s.top();
+            s.pop();
+            
+            // the left child is visited
+            if (p.second) {
+                vec.push_back(p.first->val);
+                if (p.first->right)
+                    s.push(make_pair(p.first->right, false));
+            } else {
+                s.push(make_pair(p.first, true));
+                // go to the left child
+                if (p.first->left)
+                    s.push(make_pair(p.first->left, false));
+            }
+         }
+     }
 };
