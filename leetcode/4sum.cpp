@@ -1,3 +1,48 @@
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <unordered_map>
+#include <set>
+
+using namespace std;
+
+class Solution {
+public:
+    vector<vector<int> > fourSum(vector<int> &num, int target) {
+        unordered_map<int, set<pair<int, int>>> sums;
+        // two sums
+        for (int i = 0; i < num.size(); i++)
+            for (int j = i + 1; j < num.size(); j++)
+                sums[num[i] + num[j]].insert({i, j});
+        
+        set<vector<int>> ans;
+        for (auto s : sums)
+            for (auto p : s.second)
+                for (auto q : sums[target - s.first]) {
+                    set<int> a;
+                    a.insert(p.first);
+                    a.insert(p.second);
+                    a.insert(q.first);
+                    a.insert(q.second);
+                    if (a.size() == 4) {
+                        vector<int> v = {num[p.first], num[p.second], num[q.first], num[q.second]};
+                        sort(v.begin(), v.end());
+                        ans.insert(v);
+                    }
+                }
+        
+        return vector<vector<int>>(ans.begin(), ans.end());
+    }
+};
+
+int main() {
+    Solution S;
+    vector<int> v = {-7,-5,0,7,1,1,-10,-2,7,7,-2,-6,0,-10,-5,7,-8,5};
+    auto ans = S.fourSum(v, 28);
+
+    cout << ans.size() << endl;
+    return 0;
+}
 #include <unordered_map>
 #include <vector>
 #include <utility>
