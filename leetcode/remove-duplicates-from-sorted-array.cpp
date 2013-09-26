@@ -18,3 +18,13 @@ public:
         return len;
     }
 };
+
+#include <algorithm>
+
+class Solution2 {
+public:
+    // This is a cheating solution
+    int removeDuplicates(int A[], int n) {
+        return std::unique(A, A + n) - A;
+    }
+};
