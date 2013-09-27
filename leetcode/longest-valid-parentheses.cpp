@@ -108,29 +108,24 @@ public:
 class Solution4 {
 public:
     int longestValidParentheses(string s) {
-        return max(lvp_helper(s.begin(), s.end(), '('), lvp_helper(s.rbegin(), s.rend(), ')'));
+        return max(longestValidParentheses(s.begin(), s.end(), '('),
+                   longestValidParentheses(s.rbegin(), s.rend(), ')'));
     }
-    
-    template <typename InputIter>
-    int lvp_helper(InputIter begin, InputIter end, char c) {
-        int len = 0;
-        int left, right;
-        left = right = 0;
-        
-        while (begin != end) {
-            if (*begin == c)
-                ++left;
+
+    template <typename ForwardIterator>
+    int longestValidParentheses(ForwardIterator b, ForwardIterator e, char c) {
+        int left = 0, right = 0, len = 0;
+        for (ForwardIterator i = b; i < e; i++) {
+            if (*i == c)
+                left++;
             else if (left > right) {
-                ++right;
+                right++;
                 if (left == right)
                     len = max(len, left << 1);
             } else {
-                left = 0;
-                right = 0;
+                left = right = 0;
             }
-            ++begin;
         }
-        
         return len;
     }
 };
