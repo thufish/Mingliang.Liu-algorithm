@@ -1,5 +1,3 @@
-#include <algorithm>
-
 /**
  * Definition for binary tree
  * struct TreeNode {
@@ -12,11 +10,10 @@
 class Solution {
 public:
     int maxDepth(TreeNode *root) {
-        // Start typing your C/C++ solution below
-        // DO NOT write int main() function
+        // Note: The Solution object is instantiated only once and is reused by each test case.
         if (root == NULL)
             return 0;
-        
-        return max(maxDepth(root->left) + 1, maxDepth(root->right) + 1);
+        else
+            return max(maxDepth(root->left), maxDepth(root->right)) + 1;
     }
 };
