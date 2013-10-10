@@ -1,9 +1,9 @@
+/** O(n) solution.
+ * For each bar, find the max height bar on the left and right.
+ * then for this bar it can hold min(max_left, max_right) - height
+ */
 class Solution {
 public:
-    /** O(n) solution.
-     * For each bar, find the max height bar on the left and right.
-     * then for this bar it can hold min(max_left, max_right) - height
-     */
     int trap(int A[], int n) {
         vector<int> max_left(n, 0);
         vector<int> max_right(n, 0);
@@ -26,6 +26,34 @@ public:
         for (int i = 0; i < n; i++)
             water += min(max_left[i], max_right[i]) - A[i];
             
+        return water;
+    }
+};
+
+/** two meeting pointers
+ */
+class Solution2 {
+public:
+    int trap(int A[], int n) {
+        int water = 0;
+        int i = 0, j = n - 1;
+        while (i < j) {
+            if (A[i] < A[j]) {
+                int k = i + 1;
+                while (A[k] <= A[i]) {
+                    water += (A[i] - A[k]);
+                    k++;
+                }
+                i = k;
+            } else {
+                int k = j - 1;
+                while (A[k] < A[j]) {
+                    water += (A[j] - A[k]);
+                    k--;
+                }
+                j = k;
+            }
+        }
         return water;
     }
 };
