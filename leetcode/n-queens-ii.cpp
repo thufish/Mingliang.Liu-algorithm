@@ -90,48 +90,27 @@ public:
     }
 };
 
-/**
- * We maintain taken_left and taken_right for each permutation to fast check.
- * This solution is faster than the second one because we can check each
- * candidate in constant time.
- *
- * This solution passes the leetcode when n is up to 12.
- */
-class Solution3 {
+class Solution {
 public:
     int totalNQueens(int n) {
-        if (n == 1)
-            return 1;
-        else if (n == 2 || n == 3)
-            return 0;
-        else {
-            vector<bool> taken(n, false);
-            vector<bool> taken_left(2 * n, false);
-            vector<bool> taken_right(2 * n, false);
-            vector<int> cols(n, -1);
-            return totalNQueens(cols, taken, taken_left, taken_right, 0, n);
-        }
+        int ans = 0;
+        vector<bool> col(n, true);
+        vector<bool> dia(2 * n, true);
+        vector<bool> vdia(2 * n, true);
+        totalNQueensHelper(n, 0, col, dia, vdia, ans);
+        return ans;
     }
     
-    int totalNQueens(vector<int> &cols, vector<bool> &taken, vector<bool> &taken_left, vector<bool> &taken_right, int row, int n) {
-        if (row == n)
-            return 1;
-        
-        int sum = 0;
-        for (int i = 0; i < n; i++) {
-            if (!taken[i] && !taken_left[n + i - row] && !taken_right[row + i]) {
-                cols[row] = i;
-                taken[i] = true;
-                taken_left[n + i - row] = true;
-                taken_right[row + i] = true;
-                sum += totalNQueens(cols, taken, taken_left, taken_right, row + 1, n);
-
-                taken[i] = false;
-                taken_left[n + i - row] = false;
-                taken_right[row + i] = false;
-            }
+    void totalNQueensHelper(int n, int curr, vector<bool> &col, vector<bool> &dia, vector<bool> &vdia, int &ans) {
+        if (curr == n) {
+            ans++;
+        } else {
+            for (int i = 0; i < n; i++)
+                if (col[i] && dia[i + curr] && vdia[i - curr + n]) {
+                    col[i] = dia[i + curr] = vdia[i - curr + n] = false;
+                    totalNQueensHelper(n, curr + 1, col, dia, vdia, ans);
+                    col[i] = dia[i + curr] = vdia[i - curr + n] = true;
+                }
         }
-        
-        return sum;
     }
 };
