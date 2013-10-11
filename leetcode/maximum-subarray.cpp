@@ -1,31 +1,18 @@
-#include <algorithm>
-
-using namespace std;
-
-/** The traditional O(n) algorithm
- *
- * f(i) = max{a[i], f(i - 1) + a[i], max{f(k), for 0 <= k < i}}
- */
-class Solution1 {
+class Solution {
 public:
     int maxSubArray(int A[], int n) {
-        if (n < 1)
+        if (!A || n <= 0)
             return 0;
 
-        int max = A[0];
         int max_so_far = 0;
-        
-        for (int i = 0; i < n; ++i) {
-            if (A[i] > max)
-                max = A[i];
+        int max_sum = A[0];
+        for (int i = 0; i < n; i++) {
             max_so_far += A[i];
-            if (max_so_far < 0)
-                max_so_far = 0;
-            else if (max_so_far > max)
-                max = max_so_far;
+            max_sum = max(max_so_far, max_sum);
+            max_so_far = max(0, max_so_far);
         }
         
-        return max;
+        return max_sum;
     }
 };
 
