@@ -1,42 +1,18 @@
-/** Given a set of distinct integers, S, return all possible subsets.
-    Note:
-    - Elements in a subset must be in non-descending order.
-    - The solution set must not contain duplicate subsets.
-*/
-
-#include <algorithm>
-#include <cmath>
-#include <vector>
-
-using namespace std;
-
-/// This solution uses the bit vector to select the elements
-/// For n numbers in S, there are 2^n bit vector elements; thus we should
-/// select the number if the bit is 1 and ignore the number if the bit is 0
 class Solution {
 public:
     vector<vector<int> > subsets(vector<int> &S) {
-        vector<int> s(S);
-        sort(s.begin(), s.end());
-        
-        vector<vector<int> > answer;
-        
-        int n = s.size();
-        long count = (long)pow(2, n);
-        for (long i = 0; i < count; ++i) {
-            vector<int> v;
+        sort(S.begin(), S.end());
+        vector<vector<int>> ans;
+        int size = 1 << S.size();
+        for (int i = 0; i < size; i++) {
+            vector<int> a;
             int k = i;
-            int j = 0;
-            do {
+            for (int j = 0; j < S.size() && k; j++, k = k >> 1)
                 if (k % 2)
-                    v.push_back(s[j]);
-                j++;
-                k /= 2;
-            } while (k);
-            answer.push_back(v);
+                    a.push_back(S[j]);
+            ans.push_back(a);
         }
-        
-        return answer;
+        return ans;
     }
 };
 
