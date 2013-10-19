@@ -26,9 +26,8 @@ public:
         }
         
         int ret = INT_MAX;
-        for (int i = 0; i < shortest.size(); ++i)
-            if (shortest[i] < ret)
-                ret = shortest[i];
+        for (int i : shortest)
+            ret = min(ret, i);
         return ret;
     }
 };
