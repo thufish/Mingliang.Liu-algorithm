@@ -35,3 +35,25 @@ public:
         return max_len;
     }
 };
+
+class Solution {
+public:
+    int longestConsecutive(vector<int> &num) {
+        unordered_map<int, pair<int, int>> consec;
+        int ret = 0;
+        for (int n : num) {
+            if (consec.find(n) != consec.end())
+                continue;
+            consec[n] = {n, n};
+            pair<int, int> p = {n, n}, q = {n, n};
+            if (consec.find(n - 1) != consec.end())
+                p = consec[n - 1];
+            if (consec.find(n + 1) != consec.end())
+                q = consec[n + 1];
+            consec[q.second] = {p.first, q.second};
+            consec[p.first] = {p.first, q.second};
+            ret = max(ret, q.second - p.first + 1);
+        }
+        return ret;
+    }
+};
