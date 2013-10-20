@@ -4,11 +4,10 @@ public:
         if (x < 0)
             return false;
 
-        long long base = 1;
-        while (x / base)
+        int base = 1;
+        while (x / base >= 10)
             base *= 10;
-        base /= 10;
-        long long dase = 1;
+        int dase = 1;
         while (base > dase) {
             int a = x / base;
             int b = x / dase;
