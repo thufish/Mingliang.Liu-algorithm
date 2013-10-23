@@ -21,3 +21,24 @@ public:
         }
     }
 };
+
+class Solution {
+public:
+    vector<string> letterCombinations(string digits) {
+        vector<string> ans;
+        vector<string> numbers = {"abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        
+        ans.push_back("");
+        for (char d : digits)
+            for (int j = ans.size() - 1; j >= 0; j--)
+                for (int i = numbers[d - '2'].length() - 1; i >= 0; i--)
+                    if (i) {
+                        string s(ans[j]);
+                        s.push_back(numbers[d - '2'][i]);
+                        ans.push_back(s);
+                    } else
+                        ans[j].push_back(numbers[d - '2'][i]);
+                        
+        return ans;
+    }
+};
