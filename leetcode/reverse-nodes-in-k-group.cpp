@@ -64,3 +64,38 @@ public:
         return head;
     }
 };
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *reverseKGroup(ListNode *head, int k) {
+        if (k == 0 || k == 1)
+            return head;
+        
+        ListNode *khead = head;
+        for (int i = 0; i < k; i++) {
+            if (khead)
+                khead = khead->next;
+            else
+                return head;
+        }
+        
+        ListNode *left = reverseKGroup(khead, k);
+        ListNode *p = head, *prev = NULL;
+        while (p != khead) {
+            ListNode *next = p;
+            p = p->next;
+            next->next = prev ? prev : left;
+            prev = next;
+        }
+        
+        return prev;
+    }
+};
