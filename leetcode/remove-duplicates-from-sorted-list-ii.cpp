@@ -9,29 +9,21 @@
 class Solution {
 public:
     ListNode *deleteDuplicates(ListNode *head) {
-        if (head == NULL)
-            return NULL;
-
-        ListNode *p, *q;
-        p = head;
-        q = head = NULL;
+        if (!head || !head->next)
+            return head;
         
-        while (p) {
-            ListNode *pp = p;
-            while (p && p->val == pp->val)
+        if (head->val == head->next->val) {
+            ListNode *p = head;
+            int val = head->val;
+            while (p && p->val == val) {
+                ListNode *q = p;
                 p = p->next;
-            
-            if (p == pp->next) {
-                if (q)
-                    q->next = pp;
-                q = pp;
-                if (!head)
-                    head = q;
+                delete q;
             }
+            return deleteDuplicates(p);
+        } else {
+            head->next = deleteDuplicates(head->next);
+            return head;
         }
-        if (q)
-            q->next = NULL;
-        
-        return head;
     }
 };
