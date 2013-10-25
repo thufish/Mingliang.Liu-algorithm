@@ -1,48 +1,35 @@
-/** The O(N^2) solution which can not pass the large data set */
-class Solution {
-public:
-    int canCompleteCircuit(vector<int> &gas, vector<int> &cost) {
-        for (int j = 0; j < gas.size(); j++) {
-            long long sum = 0;
-            bool ok = true;
-            for (int i = 0; ok && i < gas.size(); i++) {
-                sum += gas[(i + j) % gas.size()] - cost[(i + j) % gas.size()];
-                if (sum < 0)
-                    ok = false;
-            }
-            if (ok)
-                return j;
-        }
-        return -1;
-    }
-};
+#include <vector>
+#include <iostream>
+
+using namespace std;
 
 class Solution {
 public:
     int canCompleteCircuit(vector<int> &gas, vector<int> &cost) {
-        if (gas.size() == 0)
-            return -1;
-        
-        int sum = 0;
-        int index = -1;
-        bool last = true;
-        for (int i = 0; i < gas.size(); i++) {
-            int diff = gas[i] - cost[i];
-            if (last && diff >= 0 && sum <= 0)
-                index = i;
-            last = (diff < 0);
-            sum += diff;
+        int tank = 0, sum = 0, pos = 0;
+        for(int i = 0; i < gas.size(); i++) {
+            tank += gas[i] - cost[i];
+            sum += gas[i] - cost[i];
+            if (tank < 0) {
+                tank = 0;
+                pos = i + 1;
+            }
         }
-        
-        if (index == -1)
-            return index;
-        
-        for (int i = 0, sum = 0; i < gas.size(); i++) {
-            sum += gas[(index + i) % gas.size()] - cost[(index + i) % gas.size()];
-            if (sum < 0)
-                return -1;
-        }
-        
-        return index;
+
+        return sum < 0 ? -1 : pos;
     }
 };
+
+int main() {
+    Solution S;
+
+    vector<int> gas = {1, 4, 1, 2, 2};
+    vector<int> cost = {5, 1, 2, 1, 1};
+    cout << S.canCompleteCircuit(gas, cost);
+
+    vector<int> gas2 = {3, 1, 1};
+    vector<int> cost2 = {1, 4, 2};
+    cout << S.canCompleteCircuit(gas2, cost2);
+
+    return 0;
+}
