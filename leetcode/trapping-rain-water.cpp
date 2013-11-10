@@ -57,3 +57,68 @@ public:
         return water;
     }
 };
+
+/** Split the array at the point of the maximum one and handle the left/right
+ * part seprately
+ */
+class Solution {
+public:
+    int trap(int A[], int n) {
+        if (n <= 0)
+            return 0;
+            
+        int water = 0;
+        
+        int *m = max_element(A, A + n);
+        
+        for (int *p = A, peak = 0; p != m; p++)
+            if (*p > peak)
+                peak = *p;
+            else
+                water += peak - *p;
+                
+        for (int *q = A + n - 1, peak = 0; q != m; q--)
+            if (*q > peak)
+                peak = *q;
+            else
+                water += peak - *q;
+        
+        return water;
+    }
+};
+
+
+// 用一个栈辅助,小于栈顶的元素压入,大于等于栈顶就把栈里所有小于或
+// 等于当前值的元素全部出栈处理掉,计算面积,最后把当前元素入栈
+//
+// 时间复杂度 O(n),空间复杂度 O(n)
+class Solution {
+public:
+    int trap(int A[], int n) {
+        if (n <= 0)
+            return 0;
+            
+        int water = 0;
+        
+        stack<pair<int, int>> S;
+        
+        for (int i = 0; i < n; i++) {
+            int height = 0;
+            while (!S.empty()) {
+                int bar = S.top().first;
+                int pos = S.top().second;
+                
+                water += (min(bar, A[i]) - height) * (i - pos - 1);
+                height = bar;
+                
+                if (bar > A[i])
+                    break;
+                else
+                    S.pop();
+            }
+            S.push({A[i], i});
+        }
+        
+        return water;
+    }
+};
